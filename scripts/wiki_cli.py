@@ -216,23 +216,102 @@ def cmd_search(args):
     else:
         print(f"合計 {found_count} 個のファイルで一致しました。")
 
+def cmd_ingest(target: str = None):
+    """生ソースを raw/pending/ に配置し、Ingestの準備を行う"""
+    print("=" * 60)
+    print("📥 LLM Wiki Ingest (生ソースの取り込み準備)")
+    print("=" * 60)
+
+    pending_dir = ROOT_DIR / "raw" / "pending"
+    pending_dir.mkdir(parents=True, exist_ok=True)
+
+    if target:
+        # 1. URLの場合
+        if target.startswith("http://") or target.startswith("https://"):
+            import urllib.request
+            import urllib.parse
+            from datetime import datetime
+            
+            print(f"🌐 URLを取得中: {target}")
+            try:
+                req = urllib.request.Request(target, headers={"User-Agent": "Mozilla/5.0"})
+                with urllib.request.urlopen(req) as res:
+                    html = res.read().decode("utf-8", errors="replace")
+                
+                # タイトル抽出
+                title_match = re.search(r"<title>(.*?)</title>", html, re.IGNORECASE)
+                title = title_match.group(1).strip() if title_match else "web-source"
+                slug = re.sub(r"[^\w\-_]+", "-", title.lower()).strip("-")[:40] or "source"
+                filename = f"{datetime.now().strftime('%Y%m%d')}_{slug}.md"
+                dest_file = pending_dir / filename
+                
+                # 本文保存
+                dest_file.write_text(f"---\nsource_url: {target}\ndate: {datetime.now().strftime('%Y-%m-%d')}\n---\n\n{html}", encoding="utf-8")
+                print(f"✅ Webソースを保存しました: {dest_file.relative_to(ROOT_DIR)}")
+            except Exception as e:
+                print(f"❌ URL取得エラー: {e}")
+                return
+
+        # 2. ローカルファイルの場合
+        elif Path(target).exists():
+            src_path = Path(target)
+            dest_file = pending_dir / src_path.name
+            try:
+                dest_file.write_bytes(src_path.read_bytes())
+                print(f"✅ ファイルを pending にコピーしました: {dest_file.relative_to(ROOT_DIR)}")
+            except Exception as e:
+                print(f"❌ ファイルコピーエラー: {e}")
+                return
+        else:
+            # 3. 直接テキストとして扱う場合
+            from datetime import datetime
+            filename = f"note_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+            dest_file = pending_dir / filename
+            dest_file.write_text(target, encoding="utf-8")
+            print(f"✅ 入力テキストを保存しました: {dest_file.relative_to(ROOT_DIR)}")
+
+    # pending 内の待機中ファイルを確認
+    pending_files = [f for f in pending_dir.glob("*") if f.name != ".gitkeep"]
+    print(f"\n📂 現在 raw/pending/ に待機中のソース: {len(pending_files)} 件")
+    for f in pending_files:
+        print(f"  - {f.name}")
+
+    print("\n" + "=" * 60)
+    print("🤖 次のステップ:")
+    print("AIエージェントに以下の指示を送ると、Wikiへの蒸留・統合が自動実行されます：")
+    print(f"👉 「--ingest」 または 「raw/pending 内のファイルをWikiに取り込んで」")
+    print("=" * 60)
+
 def main():
     parser = argparse.ArgumentParser(description="LLM Wiki CLI")
+    parser.add_argument("--ingest", nargs="?", const="", default=None, help="生ソース（URL、ファイルパス、テキスト）を取り込み準備")
+
     subparsers = parser.add_subparsers(dest="command")
 
     subparsers.add_parser("lint", help="Wiki全体の整合性・リンク切れチェック")
     subparsers.add_parser("stats", help="Wikiの統計情報を表示")
 
+    ingest_parser = subparsers.add_parser("ingest", help="生ソースを取り込み準備")
+    ingest_parser.add_argument("target", nargs="?", default=None, help="対象のファイルパス、URL、またはテキスト")
+
     search_parser = subparsers.add_parser("search", help="キーワード検索")
     search_parser.add_argument("query", help="検索キーワード")
 
     args = parser.parse_args()
+
+    # --ingest フラグが指定された場合
+    if args.ingest is not None:
+        cmd_ingest(args.ingest or None)
+        return
+
     if args.command == "lint":
         cmd_lint(args)
     elif args.command == "stats":
         cmd_stats(args)
     elif args.command == "search":
         cmd_search(args)
+    elif args.command == "ingest":
+        cmd_ingest(args.target)
     else:
         parser.print_help()
 
