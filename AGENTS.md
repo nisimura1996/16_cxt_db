@@ -3,7 +3,7 @@
 本ワークスペースは、**Andrej Karpathy（アンドレイ・カルパシー）**が提唱した「LLM Wiki（永続的・複利型ナレッジベース）」のアーキテクチャに基づき運用される知識ベースです。
 
 人間は「ソースの収集」「探求の方向付け」「本質的な問いかけ」を担当し、
-AIエージェント（LLM）は「要約」「分類」「エンティティ/概念の抽出」「相互リンク作成」「過去知見との整合性維持・更新」「索引・監査ログの記帳」というすべての維持管理作業を担当します。
+AIエージェント（LLM）は「要約」「分類」「固有名詞/概念の抽出」「相互リンク作成」「過去知見との整合性維持・更新」「索引・監査ログの記帳」というすべての維持管理作業を担当します。
 
 ---
 
@@ -16,21 +16,21 @@ c:/Users/kuseg/lab/16_cxt_db/
 ├── index.md         # カタログ：カテゴリ別全ページ一覧と1行要約
 ├── log.md           # 監査ログ：時系列の作業記録（Ingest / Query / Lint）
 ├── raw/             # 生ソース層（不変のソースオブトゥルース）
-│   ├── pending/     # 蒸留待ち（未処理）の生テキスト・記事・メモ
-│   ├── ingested/    # 蒸留完了済みの生データ
-│   └── assets/      # 記事付属の画像・図版・ローカル添付ファイル
-├── sources/         # Wiki層：個別ソース要約・抽出ノート
-├── entities/        # Wiki層：固有名詞（人物、組織、ツール、リポジトリ等）
-├── concepts/        # Wiki層：概念・理論・手法・アーキテクチャ
-├── synthesis/       # Wiki層：複数ソース横断の比較・総括・考察レポート
+│   ├── mishori/     # 蒸留待ち（未処理）の生テキスト・記事・メモ
+│   ├── shorizumi/   # 蒸留完了済みの生データ
+│   └── sozai/       # 記事付属の画像・図版・ローカル添付ファイル
+├── shiryo/          # Wiki層：個別資料・ソース要約ノート
+├── koyu-meishi/     # Wiki層：固有名詞（人物、組織、ツール、リポジトリ等）
+├── gainen/          # Wiki層：概念・理論・手法・アーキテクチャ
+├── kousatsu/        # Wiki層：複数資料横断の比較・総括・考察レポート
 └── scripts/         # 支援ツール層：CLIによるLint・統計・整合性検証スクリプト
 ```
 
 ### 各層の役割と不変性ルール
 1. **生ソース層 (`raw/`)**:
    - 不変（Immutable）。LLMはここから情報を読み取るが、既存の生データを直接改変してはならない。
-   - 処理前のファイルは `raw/pending/` に配置され、処理完了後に `raw/ingested/` へ移動する。
-2. **Wiki層 (`sources/`, `entities/`, `concepts/`, `synthesis/`, `index.md`, `log.md`)**:
+   - 処理前のファイルは `raw/mishori/` に配置され、処理完了後に `raw/shorizumi/` へ移動する。
+2. **Wiki層 (`shiryo/`, `koyu-meishi/`, `gainen/`, `kousatsu/`, `index.md`, `log.md`)**:
    - LLMが100%管理・維持するMarkdown資産。
    - 人間は直接編集せず、LLMが対話を通じて加筆・修正・相互リンク張りを行う。
 3. **スキーマ層 (`AGENTS.md`)**:
@@ -41,25 +41,25 @@ c:/Users/kuseg/lab/16_cxt_db/
 ## 2. 運用オペレーション
 
 ### ① 取り込み（Ingest）
-新しいソースが `raw/pending/` に置かれた、または対話中に新たな情報源が提示された際に実行する。
+新しいソースが `raw/mishori/` に置かれた、または対話中に新たな情報源が提示された際に実行する。  
 **短縮トリガー**: ユーザーが `--ingest`、`/ingest`、または `--ingest <URL/パス>` と入力した場合、即座に待機ファイルまたは指定対象を取り込み処理する。
 
 1. **生データの格納**:
-   - ファイルとして存在しない場合は `raw/pending/<slug>.md` に不変データとして保存。
-2. **個別ソース要約の作成**:
-   - `sources/<slug>.md` を作成。
-   - YAMLフロントマター、概要、キーポイント、抽出された重要事項を整理。
-3. **エンティティおよび概念ページの作成・更新**:
-   - ソース内で言及されている固有名詞は `entities/<name>.md` へ反映。
-   - 手法、理論、設計思想は `concepts/<name>.md` へ反映。
+   - ファイルとして存在しない場合は `raw/mishori/<slug>.md` に不変データとして保存。
+2. **個別資料要約の作成**:
+   - `shiryo/<slug>.md` を作成。
+   - YAMLフロントマター、概要、主要ポイント、抽出された重要事項を整理。
+3. **固有名詞および概念ページの作成・更新**:
+   - 資料内で言及されている固有名詞は `koyu-meishi/<name>.md` へ反映。
+   - 手法、理論、設計思想は `gainen/<name>.md` へ反映。
    - **既存ページが存在する場合**: 既存の知見を消さずに新たな情報を統合。
    - **矛盾・主張の変化（Contradictions）**: 過去の記述と食い違う場合は、新旧の主張を対比・併記して進化の経緯を残す。
 4. **相互リンク（WikiLink）の網羅**:
-   - すべてのMarkdownファイル間で `[[エンティティ名]]` や `[[概念名]]` のリンクを付与。Obsidianのグラフビューで知識グラフが自然に形成されるようにする。
+   - すべてのMarkdownファイル間で `[[固有名詞]]` や `[[概念名]]` のリンクを付与。Obsidianのグラフビューで知識グラフが自然に形成されるようにする。
 5. **完了ファイルの移動**:
-   - `raw/pending/<slug>.md` を `raw/ingested/<slug>.md` へ移動。
+   - `raw/mishori/<slug>.md` を `raw/shorizumi/<slug>.md` へ移動。
 6. **`index.md` の更新**:
-   - 新規作成・更新された全ページをカタログの該当カテゴリに反映（リンク + 1行要約）。
+   - 新規作成・更新された全ページをカタログの該当カテゴリ（shiryo, koyu-meishi, gainen, kousatsu）に反映（リンク + 1行要約）。
 7. **`log.md` への追記**:
    - 末尾に `## [YYYY-MM-DD] ingest | <タイトル>` 形式のエントリを追記。
 
@@ -69,10 +69,10 @@ c:/Users/kuseg/lab/16_cxt_db/
 1. **`index.md` の事前参照**:
    - まずインデックスを読み込み、質問に関連する既存ページを特定。
 2. **該当ページの精読と横断的合成**:
-   - 関連する `sources/`, `entities/`, `concepts/` を横断して読み込み、多面的な回答を合成。
+   - 関連する `shiryo/`, `koyu-meishi/`, `gainen/` を横断して読み込み、多面的な回答を合成。
    - 回答内には根拠となるWiki内部リンク（`[[ページ名]]`）を明記。
 3. **価値ある成果のWiki還元（重要）**:
-   - 比較表、詳細な分析、体系化された考察など、再利用価値の高い成果はチャット履歴に埋もれさせず、`synthesis/<トピック名>.md` に永続化する。
+   - 比較表、詳細な分析、体系化された考察など、再利用価値の高い成果はチャット履歴に埋もれさせず、`kousatsu/<トピック名>.md` に永続化する。
    - `index.md` および `log.md`（`## [YYYY-MM-DD] query | <質問>`）に記録する。
 
 ### ③ 整合性監査（Lint）
@@ -82,7 +82,7 @@ c:/Users/kuseg/lab/16_cxt_db/
    - `python scripts/wiki_cli.py lint` を実行し、リンク切れや孤立ページを自動検出。
 2. **エージェントによる精査**:
    - 矛盾する記述や陳腐化した情報がないか確認。
-   - 多くのページで言及されているが単独ページがない概念を特定し、ページ作成を提案。
+   - 多くのページで言及されているが単独ページがない概念・固有名詞を特定し、ページ作成を提案。
 3. **`log.md` への追記**:
    - `## [YYYY-MM-DD] lint | <検査内容>` を記録。
 
@@ -91,7 +91,7 @@ c:/Users/kuseg/lab/16_cxt_db/
 ## 3. ファイル命名 & Markdown規約
 
 1. **ファイル名**:
-   - 原則として小文字ケバブケース（例: `llm-wiki.md`, `andrej-karpathy.md`）。日本語概念の場合はローマ字または分かりやすい英単語（例: `knowledge-compounding.md`）。
+   - 原則として小文字ケバブケース（例: `llm-wiki.md`, `andrej-karpathy.md`）。日本語概念の場合はローマ字または分かりやすい英単語（例: `compounding-knowledge.md`）。
 2. **内部リンク**:
    - Obsidian互換のWikilink記法 `[[ファイル名（拡張子なし）]]` または `[[ファイル名|表示テキスト]]` を使用。
 3. **YAMLフロントマター**:
@@ -99,13 +99,13 @@ c:/Users/kuseg/lab/16_cxt_db/
 
 ### テンプレート例
 
-#### `sources/` 用
+#### `shiryo/`（資料）用
 ```markdown
 ---
-type: source
+type: shiryo
 title: 記事・ドキュメントのタイトル
 source_url: https://example.com/article
-ingested_date: YYYY-MM-DD
+torikomi_date: YYYY-MM-DD
 tags: [ai, llm, knowledge-base]
 ---
 
@@ -113,23 +113,23 @@ tags: [ai, llm, knowledge-base]
 
 ## 概要
 ## 主要ポイント
-## 抽出エンティティ・概念
+## 抽出した固有名詞・概念
 - [[概念名]]
-- [[エンティティ名]]
+- [[固有名詞]]
 ```
 
-#### `concepts/` および `entities/` 用
+#### `gainen/`（概念）および `koyu-meishi/`（固有名詞）用
 ```markdown
 ---
-type: concept  # または entity
-title: 概念・エンティティ名
+type: gainen  # または koyu-meishi
+title: 概念名・固有名詞
 last_updated: YYYY-MM-DD
-sources:
-  - "[[sources/ソース名]]"
+shiryo:
+  - "[[karpathy-llm-wiki]]"
 tags: [tag1, tag2]
 ---
 
-# 概念・エンティティ名
+# 概念名・固有名詞
 
 ## 定義・概要
 ## コア特徴・詳細

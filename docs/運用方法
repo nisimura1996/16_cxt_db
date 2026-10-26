@@ -4,25 +4,25 @@ Web記事、論文、議事録、メモなどの生データをWikiへコンパ�
 
 ### 💬 自然言語・短縮コマンドでの頼み方
 - 短縮コマンド（最速）:
-  `--ingest`（raw/pending/ 内の待機ファイルを一括取り込み）
+  `--ingest`（raw/mishori/ 内の待機ファイルを一括取り込み）
   `--ingest https://example.com/article`
-  `--ingest raw/pending/article.md`
+  `--ingest raw/mishori/article.md`
 - URLから直接取り込む:
   「このWeb記事をWikiに取り込んで：https://example.com/article」
 - テキストを直接渡す:
   「以下の文章を生ソースとして保存して、要約と概念ページをWikiに反映して：（本文貼り付け）」
 - 置いたファイルを処理させる:
-  「raw/pending/ に置いた article.md をWikiに取り込んで、完了したら raw/ingested/ に移して」
+  「raw/mishori/ に置いた article.md をWikiに取り込んで、完了したら raw/shorizumi/ に移して」
 - 特定トピックを重点抽出:
   「この記事を取り込んでほしい。特に『セキュリティ設計』と『コスト比較』の観点を重点的に概念ページへまとめて」
 
 ### 💻 コード・コマンドでの頼み方
 ```powershell
-# 1. CLIからワンライナーで取り込み準備（pendingへ配置）
+# 1. CLIからワンライナーで取り込み準備（mishoriへ配置）
 python C:\Users\kuseg\lab\16_cxt_db\scripts\wiki_cli.py --ingest "https://example.com/article"
 python C:\Users\kuseg\lab\16_cxt_db\scripts\wiki_cli.py --ingest "C:\path\to\file.md"
 
-# 2. 引数なしで pending の待機状況を確認
+# 2. 引数なしで mishori の待機状況を確認
 python C:\Users\kuseg\lab\16_cxt_db\scripts\wiki_cli.py --ingest
 
 # 3. 取り込み後のWiki統計を確認
@@ -42,9 +42,9 @@ Wiki内に事前コンパイルされた知識をもとに回答を作成させ�
 - Wiki横断の質問:
   「Wiki内の知識をもとに、RAGとLLM Wikiの最大の違いを初心者向けに説明して」
 - 複数概念の比較分析:
-  「concepts/ にある技術Aと技術Bのメリット・デメリットを比較表にして」
+  「gainen/ にある技術Aと技術Bのメリット・デメリットを比較表にして」
 - 成果のWiki還元（最重要）:
-  「この比較分析の内容を、後から再利用できるように synthesis/ フォルダに新しいページとして保存し、index.md にも追加して」
+  「この比較分析の内容を、後から再利用できるように kousatsu/ フォルダに新しいページとして保存し、index.md にも追加して」
 - 特定人物・ツールの情報取得:
   「Wiki内で Andrej Karpathy が言及されているページを全部洗い出して、彼の主張の変遷をまとめて」
 - プレゼン・スライド生成:
@@ -59,8 +59,8 @@ python C:\Users\kuseg\lab\16_cxt_db\scripts\wiki_cli.py search "RAG"
 # 2. index.md（全体カタログ）を直接確認
 Get-Content -Path "C:\Users\kuseg\lab\16_cxt_db\index.md"
 
-# 3. 作成された合成レポート（synthesis）を一覧表示
-Get-ChildItem -Path "C:\Users\kuseg\lab\16_cxt_db\synthesis" -Filter *.md
+# 3. 作成された考察レポート（kousatsu）を一覧表示
+Get-ChildItem -Path "C:\Users\kuseg\lab\16_cxt_db\kousatsu" -Filter *.md
 ```
 
 ---
@@ -73,7 +73,7 @@ Wikiが成長するにつれて発生するリンク切れ、孤立ページ、�
 - 定期健康診断:
   「Wiki全体のLint（整合性チェック）を実行して、リンク切れや孤立ページがあれば直して」
 - 未作成ページの洗い出し:
-  「多くのページで言及されているのに、まだ単独ページ（concepts/ や entities/）がない重要キーワードはある？あれば作成して」
+  「多くのページで言及されているのに、まだ単独ページ（gainen/ や koyu-meishi/）がない重要キーワードはある？あれば作成して」
 - 知識の矛盾・古い情報の更新:
   「最新のソースと昔のページで主張が食い違っている箇所がないか精査して。見つかったら新旧の比較を併記して」
 - 目次（index.md）の同期:

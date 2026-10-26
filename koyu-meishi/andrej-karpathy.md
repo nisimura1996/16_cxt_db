@@ -1,10 +1,10 @@
 ---
-type: entity
+type: koyu-meishi
 category: person
 title: Andrej Karpathy (アンドレイ・カルパシー)
 last_updated: 2026-10-26
-sources:
-  - "[[sources/karpathy-llm-wiki]]"
+shiryo:
+  - "[[karpathy-llm-wiki]]"
 tags: [ai-researcher, openai, tesla, eureka-labs]
 ---
 
@@ -24,6 +24,6 @@ AIの内部動作やアーキテクチャを直感的に解説する卓越した
    - AIを活用した高品質・大規模教育プラットフォームの開発。
 
 ## 関連ページ
-- ソース: [[sources/karpathy-llm-wiki]]
+- 元資料: [[karpathy-llm-wiki]]
 - 概念: [[llm-wiki]], [[compounding-knowledge]], [[three-layer-architecture]]
-- 比較分析: [[llm-wiki-vs-rag]]
+- 考察: [[llm-wiki-vs-rag]]

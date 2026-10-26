@@ -15,4 +15,14 @@ log.md
 
 
 scripts/wiki_cli.py
-リンク切れ・孤立ページの自動検出（lint）、統計（stats）、全文検索（search）ツール
+リンク切れ・孤立ページの自動検出（lint）、統計（stats）、全文検索（search）、取り込み（--ingest）ツール
+
+
+【Wiki層ディレクトリ（日本語ローマ字）】
+shiryo/       : 個別資料の要約ノート（旧 sources）
+koyu-meishi/  : 人物・ツール・サービス名などの固有名詞（旧 entities）
+gainen/       : 理論・設計思想・手法などの概念（旧 concepts）
+kousatsu/     : 複数資料を横断した比較・総括レポート（旧 synthesis）
+raw/mishori/  : 蒸留待ちの生データ（旧 raw/pending）
+raw/shorizumi/: 蒸留完了済みの生データ（旧 raw/ingested）
+raw/sozai/    : 添付画像・図版素材（旧 raw/assets）

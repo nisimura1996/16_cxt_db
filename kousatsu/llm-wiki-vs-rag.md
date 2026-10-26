@@ -1,9 +1,9 @@
 ---
-type: synthesis
+type: kousatsu
 title: LLM Wiki vs 従来型RAG：知識管理パラダイムの徹底比較
 last_updated: 2026-10-26
-sources:
-  - "[[sources/karpathy-llm-wiki]]"
+shiryo:
+  - "[[karpathy-llm-wiki]]"
 tags: [synthesis, rag, llm-wiki, architecture-comparison]
 ---
 
@@ -48,5 +48,5 @@ RAGを構築すると、特定のベクトルデータベース、エンベデ�
 
 ## 関連ページ
 - 提唱者: [[andrej-karpathy]]
-- 原典ソース: [[sources/karpathy-llm-wiki]]
+- 原典資料: [[karpathy-llm-wiki]]
 - コア概念: [[llm-wiki]], [[compounding-knowledge]], [[three-layer-architecture]]

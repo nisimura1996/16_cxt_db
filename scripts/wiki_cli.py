@@ -24,8 +24,8 @@ if sys.platform == "win32":
     except AttributeError:
         pass
 
-# Wiki管理対象ディレクトリ
-WIKI_DIRS = ["sources", "entities", "concepts", "synthesis"]
+# Wiki管理対象ディレクトリ（日本語ローマ字）
+WIKI_DIRS = ["shiryo", "koyu-meishi", "gainen", "kousatsu"]
 
 def get_all_wiki_files() -> Dict[str, Path]:
     """すべてのWiki層Markdownファイルを {stem: Path} で取得"""
@@ -140,8 +140,8 @@ def cmd_stats(args):
     print("📊 LLM Wiki 統計情報 (Knowledge Base Stats)")
     print("=" * 60)
 
-    raw_pending = list((ROOT_DIR / "raw" / "pending").glob("*.md"))
-    raw_ingested = list((ROOT_DIR / "raw" / "ingested").glob("*.md"))
+    raw_mishori = list((ROOT_DIR / "raw" / "mishori").glob("*.md"))
+    raw_shorizumi = list((ROOT_DIR / "raw" / "shorizumi").glob("*.md"))
 
     counts = {}
     total_pages = 0
@@ -164,8 +164,8 @@ def cmd_stats(args):
     avg_links = total_links / total_pages if total_pages > 0 else 0
 
     print(f"\n[生ソース層 (raw/)]")
-    print(f"  - 蒸留待ち (pending):   {len(raw_pending):3d} ファイル")
-    print(f"  - 蒸留済み (ingested):  {len(raw_ingested):3d} ファイル")
+    print(f"  - 蒸留待ち (mishori):   {len(raw_mishori):3d} ファイル")
+    print(f"  - 蒸留済み (shorizumi): {len(raw_shorizumi):3d} ファイル")
 
     print(f"\n[Wiki層 (コンパイル済)]")
     for d in WIKI_DIRS:
@@ -217,13 +217,13 @@ def cmd_search(args):
         print(f"合計 {found_count} 個のファイルで一致しました。")
 
 def cmd_ingest(target: str = None):
-    """生ソースを raw/pending/ に配置し、Ingestの準備を行う"""
+    """生ソースを raw/mishori/ に配置し、Ingestの準備を行う"""
     print("=" * 60)
     print("📥 LLM Wiki Ingest (生ソースの取り込み準備)")
     print("=" * 60)
 
-    pending_dir = ROOT_DIR / "raw" / "pending"
-    pending_dir.mkdir(parents=True, exist_ok=True)
+    mishori_dir = ROOT_DIR / "raw" / "mishori"
+    mishori_dir.mkdir(parents=True, exist_ok=True)
 
     if target:
         # 1. URLの場合
@@ -243,7 +243,7 @@ def cmd_ingest(target: str = None):
                 title = title_match.group(1).strip() if title_match else "web-source"
                 slug = re.sub(r"[^\w\-_]+", "-", title.lower()).strip("-")[:40] or "source"
                 filename = f"{datetime.now().strftime('%Y%m%d')}_{slug}.md"
-                dest_file = pending_dir / filename
+                dest_file = mishori_dir / filename
                 
                 # 本文保存
                 dest_file.write_text(f"---\nsource_url: {target}\ndate: {datetime.now().strftime('%Y-%m-%d')}\n---\n\n{html}", encoding="utf-8")
@@ -255,10 +255,10 @@ def cmd_ingest(target: str = None):
         # 2. ローカルファイルの場合
         elif Path(target).exists():
             src_path = Path(target)
-            dest_file = pending_dir / src_path.name
+            dest_file = mishori_dir / src_path.name
             try:
                 dest_file.write_bytes(src_path.read_bytes())
-                print(f"✅ ファイルを pending にコピーしました: {dest_file.relative_to(ROOT_DIR)}")
+                print(f"✅ ファイルを mishori にコピーしました: {dest_file.relative_to(ROOT_DIR)}")
             except Exception as e:
                 print(f"❌ ファイルコピーエラー: {e}")
                 return
@@ -266,20 +266,20 @@ def cmd_ingest(target: str = None):
             # 3. 直接テキストとして扱う場合
             from datetime import datetime
             filename = f"note_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
-            dest_file = pending_dir / filename
+            dest_file = mishori_dir / filename
             dest_file.write_text(target, encoding="utf-8")
             print(f"✅ 入力テキストを保存しました: {dest_file.relative_to(ROOT_DIR)}")
 
-    # pending 内の待機中ファイルを確認
-    pending_files = [f for f in pending_dir.glob("*") if f.name != ".gitkeep"]
-    print(f"\n📂 現在 raw/pending/ に待機中のソース: {len(pending_files)} 件")
-    for f in pending_files:
+    # mishori 内の待機中ファイルを確認
+    mishori_files = [f for f in mishori_dir.glob("*") if f.name != ".gitkeep"]
+    print(f"\n📂 現在 raw/mishori/ に待機中のソース: {len(mishori_files)} 件")
+    for f in mishori_files:
         print(f"  - {f.name}")
 
     print("\n" + "=" * 60)
     print("🤖 次のステップ:")
     print("AIエージェントに以下の指示を送ると、Wikiへの蒸留・統合が自動実行されます：")
-    print(f"👉 「--ingest」 または 「raw/pending 内のファイルをWikiに取り込んで」")
+    print(f"👉 「--ingest」 または 「raw/mishori 内のファイルをWikiに取り込んで」")
     print("=" * 60)
 
 def main():

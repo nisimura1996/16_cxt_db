@@ -14,37 +14,37 @@ c:/Users/kuseg/lab/16_cxt_db/
 # Git除外設定
 ├── .gitignore
 
-# 生ソース層（不変のソースオブトゥルース）
+# 生データ層（不変の一次情報・ソースオブトゥルース）
 ├── raw/
 
-# 蒸留待ち（未処理）の生テキスト・記事
-│   ├── pending/
+# 蒸留待ち（未処理）の生テキスト・記事・メモ
+│   ├── mishori/
 
-# 蒸留完了済みの生ソース
-│   ├── ingested/
+# 蒸留完了済みの生データ（保管庫）
+│   ├── shorizumi/
 
 # Karpathyの提唱Gist原典
 │   │   └── karpathy-llm-wiki.md
 
-# 記事付属の画像・添付ファイル
-│   └── assets/
+# 記事付属の画像・図版・添付素材
+│   └── sozai/
 
-# Wiki層：個別ソース要約
-├── sources/
+# Wiki層：個別資料・ソース要約ノート（旧 sources）
+├── shiryo/
 │   └── karpathy-llm-wiki.md
 
-# Wiki層：人物・組織・ツール等
-├── entities/
+# Wiki層：固有名詞・人物・組織・ツール等（旧 entities）
+├── koyu-meishi/
 │   └── andrej-karpathy.md
 
-# Wiki層：概念・理論・アーキテクチャ
-├── concepts/
+# Wiki層：概念・理論・アーキテクチャ・設計思想（旧 concepts）
+├── gainen/
 │   ├── llm-wiki.md
 │   ├── compounding-knowledge.md
 │   └── three-layer-architecture.md
 
-# Wiki層：複数ソース横断の比較・総括レポート
-├── synthesis/
+# Wiki層：複数資料横断の比較・総括・考察レポート（旧 synthesis）
+├── kousatsu/
 │   └── llm-wiki-vs-rag.md
 
 # 支援ツール層：CLIユーティリティ

@@ -1,9 +1,9 @@
 ---
-type: concept
+type: gainen
 title: Three-Layer Architecture (LLM Wikiの3層構造)
 last_updated: 2026-10-26
-sources:
-  - "[[sources/karpathy-llm-wiki]]"
+shiryo:
+  - "[[karpathy-llm-wiki]]"
 tags: [architecture, design-pattern, llm-wiki]
 ---
 
@@ -22,7 +22,7 @@ tags: [architecture, design-pattern, llm-wiki]
                            v
 +-------------------------------------------------------+
 | 2. Wiki層 (The Wiki)                                  |
-|    - sources/, entities/, concepts/, synthesis/       |
+|    - shiryo/, koyu-meishi/, gainen/, kousatsu/        |
 |    - index.md, log.md                                 |
 |    - LLMが100%管理・編集・維持するMarkdown知識グラフ   |
 +-------------------------------------------------------+
@@ -30,7 +30,7 @@ tags: [architecture, design-pattern, llm-wiki]
                            | (不変参照)
 +-------------------------------------------------------+
 | 1. 生ソース層 (Raw Sources)                           |
-|    - raw/pending/, raw/ingested/, raw/assets/         |
+|    - raw/mishori/, raw/shorizumi/, raw/sozai/         |
 |    - 人間が集めた一次情報（記事、論文、議事録、画像）  |
 |    - 不変（Immutable：LLMは書き換えない）            |
 +-------------------------------------------------------+
@@ -39,12 +39,12 @@ tags: [architecture, design-pattern, llm-wiki]
 ## 各層の詳細と運用原則
 
 ### 1. 生ソース層 (Raw Sources)
-- **保管場所**: `raw/pending/`（未処理）、`raw/ingested/`（処理済）、`raw/assets/`（添付メディア）
+- **保管場所**: `raw/mishori/`（未処理）、`raw/shorizumi/`（処理済）、`raw/sozai/`（添付素材）
 - **特性**: **不変（Immutable）**。ソースオブトゥルース（信頼できる唯一の情報源）として永久保存される。
 - **原則**: LLMは内容を読み取ってWiki層へ抽出するが、元ファイル自体を書き換えてはならない。
 
 ### 2. Wiki層 (The Wiki)
-- **保管場所**: `sources/`, `entities/`, `concepts/`, `synthesis/`, `index.md`, `log.md`
+- **保管場所**: `shiryo/`, `koyu-meishi/`, `gainen/`, `kousatsu/`, `index.md`, `log.md`
 - **特性**: **可変・成長型（Mutable & Compounding）**。
 - **原則**: 人間は原則として手動編集せず、LLMが編集・更新・リンク張りを一手に引き受ける。
 
@@ -57,4 +57,4 @@ tags: [architecture, design-pattern, llm-wiki]
 - 中心概念: [[llm-wiki]]
 - 提唱者: [[andrej-karpathy]]
 - 運用効果: [[compounding-knowledge]]
-- 比較分析: [[llm-wiki-vs-rag]]
+- 考察: [[llm-wiki-vs-rag]]
