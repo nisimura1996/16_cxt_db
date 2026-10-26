@@ -5,7 +5,7 @@ c:/Users/kuseg/lab/16_cxt_db/
 # 人間用ガイド：Obsidian連携・運用マニュアル
 ├── README.md
 
-# カタログ：カテゴリ別全ページ一覧と1行要約
+# カタログ：主観・客観の全索引と1行要約
 ├── index.md
 
 # 監査ログ：時系列作業記録（Ingest / Query / Lint）
@@ -14,38 +14,48 @@ c:/Users/kuseg/lab/16_cxt_db/
 # Git除外設定
 ├── .gitignore
 
-# 生データ層（不変の一次情報・ソースオブトゥルース）
-├── raw/
-
-# 蒸留待ち（未処理）の生テキスト・記事・メモ
+# 【生データ層：不変の唯一の入口】
+├── 05-raw/
+│   # 蒸留待ち（記事、壁打ちメモ、対話ログ何でもここへ）
 │   ├── mishori/
-
-# 蒸留完了済みの生データ（保管庫）
+│   # 蒸留完了済みの生データ保管庫
 │   ├── shorizumi/
-
-# Karpathyの提唱Gist原典
 │   │   └── karpathy-llm-wiki.md
-
-# 記事付属の画像・図版・添付素材
+│   # 記事付属の画像・図版素材
 │   └── sozai/
 
-# Wiki層：個別資料・ソース要約ノート（旧 sources）
-├── shiryo/
-│   └── karpathy-llm-wiki.md
+# 【主観層：じぶん取説・お作法・ダメ出し記憶】
+├── 10-syukan/
+│   # 全ドメイン共通の根本哲学・判断軸マスター
+│   ├── kihon-houshin.md
+│   # ドメイン：HTML/CSS
+│   ├── html-css/
+│   │   ├── rule.md            # お作法・確定ルール・推奨コード見本
+│   │   └── kioku.md           # ダメ出し履歴・NGパターン記憶
+│   # ドメイン：メール
+│   └── email/
+│       ├── rule.md            # 敬語トーン・推奨文面
+│       └── kioku.md           # 過去のダメ出し・嫌いな表現記憶
 
-# Wiki層：固有名詞・人物・組織・ツール等（旧 entities）
-├── koyu-meishi/
-│   └── andrej-karpathy.md
+# 【客観層：世の中の事実・教科書・技術資料】
+├── 15-kyakkan/
+│   # 個別資料・ソース要約ノート
+│   ├── shiryo/
+│   │   └── karpathy-llm-wiki.md
+│   # 固有名詞ノート（人物、ツール、API仕様）
+│   ├── koyu-meishi/
+│   │   └── andrej-karpathy.md
+│   # 概念ノート（理論、設計思想、アーキテクチャ）
+│   ├── gainen/
+│   │   ├── llm-wiki.md
+│   │   ├── compounding-knowledge.md
+│   │   └── three-layer-architecture.md
+│   # 複数資料横断の比較・総括レポート
+│   └── kousatsu/
+│       └── llm-wiki-vs-rag.md
 
-# Wiki層：概念・理論・アーキテクチャ・設計思想（旧 concepts）
-├── gainen/
-│   ├── llm-wiki.md
-│   ├── compounding-knowledge.md
-│   └── three-layer-architecture.md
-
-# Wiki層：複数資料横断の比較・総括・考察レポート（旧 synthesis）
-├── kousatsu/
-│   └── llm-wiki-vs-rag.md
+# ガイド・メモ保管場所
+├── docs/
 
 # 支援ツール層：CLIユーティリティ
 └── scripts/

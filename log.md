@@ -37,3 +37,16 @@
     - `raw/ingested/` ➡ `raw/shorizumi/`（処理済み生データ）
     - `raw/assets/` ➡ `raw/sozai/`（添付画像・素材）
   - 全Markdownファイル内のYAMLフロントマター（`type: shiryo` 等）およびWikiLink、ドキュメント、CLIスクリプト（`wiki_cli.py`）をすべて連動更新。
+
+## [2026-10-26] arch | 3大並列構造（05-raw, 10-syukan, 15-kyakkan）への再編
+- 種別: アーキテクチャ強化・ソート順固定
+- 実行内容:
+  - 認知的負荷ゼロ化のため、生データ入口を `05-raw/mishori/` に完全集約（外も内もここへ投入）。
+  - ディレクトリをソート順固定の3大並列構造へ再編：
+    - `05-raw/`: 生データ層（不変の唯一の入口）
+    - `10-syukan/`: 主観層（じぶん取説・お作法・ダメ出し記憶）
+      - `kihon-houshin.md`（共通哲学）
+      - `<ドメイン>/rule.md`（確定お作法）と `<ドメイン>/kioku.md`（NG履歴・ダメ出し記憶）
+    - `15-kyakkan/`: 客観層（世の中の事実・教科書）
+      - `shiryo/`, `koyu-meishi/`, `gainen/`, `kousatsu/` を集約。
+  - `wiki_cli.py`、`AGENTS.md`、`index.md`、`README.md`、`docs/` を全面連動更新。

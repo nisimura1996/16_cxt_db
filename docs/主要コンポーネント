@@ -1,5 +1,5 @@
 AGENTS.md
-AIエージェントが自律的に取り込み・更新・健康診断を行うための行動規範（3層アーキテクチャ、Ingest/Query/Lint手順、命名規則）
+AIエージェントが自律的に取り込み・更新・健康診断を行うための行動規範（3層アーキテクチャ、Ingest/Query/Lint手順、主観/客観の自動蒸留ルール）
 
 
 README.md
@@ -7,7 +7,7 @@ README.md
 
 
 index.md
-全Wikiページの目録と1行要約。LLMが検索時に最初に参照するカタログ
+主観層・客観層の全Wikiページの目録と1行要約。LLMが検索時に最初に参照するカタログ
 
 
 log.md
@@ -18,11 +18,18 @@ scripts/wiki_cli.py
 リンク切れ・孤立ページの自動検出（lint）、統計（stats）、全文検索（search）、取り込み（--ingest）ツール
 
 
-【Wiki層ディレクトリ（日本語ローマ字）】
-shiryo/       : 個別資料の要約ノート（旧 sources）
-koyu-meishi/  : 人物・ツール・サービス名などの固有名詞（旧 entities）
-gainen/       : 理論・設計思想・手法などの概念（旧 concepts）
-kousatsu/     : 複数資料を横断した比較・総括レポート（旧 synthesis）
-raw/mishori/  : 蒸留待ちの生データ（旧 raw/pending）
-raw/shorizumi/: 蒸留完了済みの生データ（旧 raw/ingested）
-raw/sozai/    : 添付画像・図版素材（旧 raw/assets）
+【階層構造（ソート順固定）】
+05-raw/      : 生データ層（不変の唯一の入口。外部記事・壁打ちメモすべてここ）
+  - mishori/ : 蒸留待ち（未処理）
+  - shorizumi/: 蒸留完了済み
+  - sozai/   : 添付画像・素材
+
+10-syukan/   : 主観層（じぶん取説・お作法・ダメ出し記憶）
+  - <ドメイン>/rule.md  : 確定ルール・最新のお作法
+  - <ドメイン>/kioku.md : ダメ出し履歴・NGパターン
+
+15-kyakkan/  : 客観層（世の中の事実・教科書）
+  - shiryo/     : 資料要約ノート
+  - koyu-meishi/: 固有名詞（人物・ツール）
+  - gainen/     : 理論・概念
+  - kousatsu/   : 考察・比較レポート
