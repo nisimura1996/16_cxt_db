@@ -1,0 +1,52 @@
+c:/Users/kuseg/lab/16_cxt_db/
+# スキーマ層：エージェント用運用プロトコル規約書
+├── AGENTS.md
+
+# 人間用ガイド：Obsidian連携・運用マニュアル
+├── README.md
+
+# カタログ：カテゴリ別全ページ一覧と1行要約
+├── index.md
+
+# 監査ログ：時系列作業記録（Ingest / Query / Lint）
+├── log.md
+
+# Git除外設定
+├── .gitignore
+
+# 生ソース層（不変のソースオブトゥルース）
+├── raw/
+
+# 蒸留待ち（未処理）の生テキスト・記事
+│   ├── pending/
+
+# 蒸留完了済みの生ソース
+│   ├── ingested/
+
+# Karpathyの提唱Gist原典
+│   │   └── karpathy-llm-wiki.md
+
+# 記事付属の画像・添付ファイル
+│   └── assets/
+
+# Wiki層：個別ソース要約
+├── sources/
+│   └── karpathy-llm-wiki.md
+
+# Wiki層：人物・組織・ツール等
+├── entities/
+│   └── andrej-karpathy.md
+
+# Wiki層：概念・理論・アーキテクチャ
+├── concepts/
+│   ├── llm-wiki.md
+│   ├── compounding-knowledge.md
+│   └── three-layer-architecture.md
+
+# Wiki層：複数ソース横断の比較・総括レポート
+├── synthesis/
+│   └── llm-wiki-vs-rag.md
+
+# 支援ツール層：CLIユーティリティ
+└── scripts/
+    └── wiki_cli.py
