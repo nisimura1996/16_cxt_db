@@ -24,17 +24,25 @@ AIエージェントは常に本案内図に従い、最小限のトークンで
 ## 3. コアオペレーション・プロトコル
 
 ### ① 取り込み・自動蒸留 (Ingest)
-- **トリガー**: `--ingest`、`/ingest`、または `05-raw/mishori/` への生データ投入。
+- **トリガー**: `/ingest`（または `--ingest`、`05-raw/mishori/` への生データ投入）。
 - **動作**:
   1. 客観的な事実・仕様 ➡ `15-kyakkan/` 配下へ反映。
   2. ユーザーのダメ出し・好み ➡ `10-syukan/` 配下の該当ドメインへ反映（新ドメイン時は `rule.md` と `kioku.md` をペア作成。詳細は `10-syukan/kihon-houshin.md` 参照）。
   3. 生データを `05-raw/shorizumi/` へ退避し、`index.md` と `log.md` を更新。
 
-### ② 問い合わせ・作業生成 (Query & Generation)
+### ② セッション振り返り・ダメ出し吸い上げ (Feedback & Diary)
+- **トリガー**: `/llm-wiki`、`作業記録`、`今日の振り返り`、`セッション終了` 等。
+- **動作**:
+  1. 直前の会話ログから ❌ Before（指摘前の出力）/ ✅ After（手直し後の出力）/ 💡 Why（判断理由）を抽出。
+  2. 該当ドメインの `10-syukan/<ドメイン>/kioku.md` に履歴を追記し、`rule.md` の確定お作法を更新。
+  3. `index.md` および `log.md` を更新。
+
+### ③ 問い合わせ・作業生成 (Query & Generation)
 - **トークン抑制原則**:
   - 作業依頼時、無関係な生データや客観層は読まない。
   - 依頼のドメイン（例: HTML）を判定し、**`10-syukan/<ドメイン>/rule.md` だけ**を読み込んで作業する。
   - 有用な横断考察・比較分析は `15-kyakkan/kousatsu/` に還元する。
 
-### ③ 整合性監査 (Lint)
-- `python scripts/wiki_cli.py lint` でリンク切れ・孤立ページを定期解消する。
+### ④ 整合性監査 (Lint)
+- **トリガー**: `/lint`、または「WikiのLintを実行して」。
+- **動作**: `python scripts/wiki_cli.py lint` でリンク切れ・孤立ページを定期解消する。
