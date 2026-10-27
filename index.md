@@ -10,7 +10,7 @@
 ## 🧭 主観層・じぶん取説 (10-syukan/)
 あなたの好み・美意識・確定ルール・ダメ出し履歴の蓄積。
 
-- [[10-syukan/kihon-houshin|kihon-houshin]]: 全ドメイン共通の根本哲学・持続可能性と低摩擦の原則。
+- [[10-syukan/kihon-houshin|kihon-houshin]]: 全ドメイン共通の根本哲学・外部記憶化と再説明ゼロ、スキル集約・頭脳と手足の分離。
 - **html-css/**:
   - [[10-syukan/html-css/rule|html-css/rule]]: HTML/CSSの確定お作法（セマンティックタグ優先、BEM命名、コード見本）。
   - [[10-syukan/html-css/kioku|html-css/kioku]]: 過去のダメ出し・指摘履歴（div乱用の禁止など）。
@@ -33,6 +33,7 @@
 - [[llm-wiki]]: LLMがMarkdown知識ベースを自律的にコンパイル・維持する永続的ナレッジベース構築手法。
 - [[compounding-knowledge]]: 知識が蓄積されるほど相互連関が深まり、価値が幾何級数的に高まる複利型ナレッジの思想。
 - [[three-layer-architecture]]: 生データ層（不変）、Wiki層（LLM管理）、スキーマ層（規約）からなるLLM Wikiの基盤構造。
+- [[external-memory-and-tool-separation]]: 外部記憶による再説明ゼロ化と、頭脳（スキル）と手足（Pythonスクリプト）の責務分離設計思想。
 
 ### 考察・まとめ (kousatsu/)
 - [[llm-wiki-vs-rag]]: 従来型RAG（検索型）とLLM Wiki（コンパイル型）のアーキテクチャ・運用思想の徹底比較。
